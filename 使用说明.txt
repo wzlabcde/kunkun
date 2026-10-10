@@ -1,0 +1,54 @@
+========================================
+Instagram 收藏下载器 - 使用说明
+========================================
+
+【软件功能】
+下载 Instagram 账号中收藏的所有照片和视频
+
+【使用前提】
+需要准备一个 cookies.txt 文件（获取方法见下方）
+
+【使用步骤】
+1. 双击运行 InstagramDownloader.exe
+2. 输入 Instagram 用户名（如 osmani9382026）
+3. 选择 cookies.txt 文件
+4. 选择输出文件夹（默认为 ~/Downloads/Instagram）
+5. 点击"开始下载"
+6. 等待下载完成
+
+【如何获取 cookies.txt】
+方法一：使用浏览器扩展
+1. 用 Chrome/Edge 登录 Instagram
+2. 安装 "Cookie-Editor" 扩展
+   - Chrome: https://chrome.google.com/webstore/detail/cookie-editor/hlkenndednhfkekhgcdicdfddnkalmdm
+   - Edge: https://microsoftedge.microsoft.com/addons/detail/cookieeditor/mngaaibpofnlgdgpjcfmokanfljfmnep
+3. 打开 Instagram 页面
+4. 点击 Cookie-Editor 图标 → Export → Netscape 格式
+5. 保存为 cookies.txt
+
+方法二：手动复制（高级用户）
+1. F12 打开开发者工具 → Network 标签
+2. 刷新 Instagram 页面
+3. 找到任意请求，复制 Request Headers 中的 Cookie 值
+4. 转换为 Netscape 格式保存
+
+【注意事项】
+- Cookies 有效期有限，过期后需重新获取
+- 下载速度取决于网络状况
+- 大量下载时建议保持网络稳定
+- 仅下载自己有权访问的内容
+
+【文件保存位置】
+下载的文件按发布者用户名分文件夹保存
+
+【常见问题】
+Q: 提示"找不到 gallery-dl"？
+A: 这是打包问题，请确保使用的是完整打包版本
+
+Q: 下载失败或报错？
+A: 检查 cookies 是否过期，重新获取后再试
+
+Q: 可以只下载图片不下载视频吗？
+A: 当前版本不支持筛选，图片和视频都会下载
+
+========================================
