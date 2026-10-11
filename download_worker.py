@@ -17,6 +17,8 @@ class DownloadWorker(QThread):
         self.username = username
         self.cookies_path = cookies_path
         self.output_path = output_path
+        # archive 文件按用户名区分，放在输出目录下
+        self.archive_path = os.path.join(output_path, f".gallery_dl_{username}.archive")
         self._is_cancelled = False
         self.process = None
 
@@ -38,6 +40,7 @@ class DownloadWorker(QThread):
                 self._resolve_gallery_dl(),
                 '--cookies', self.cookies_path,
                 '-d', self.output_path,
+                '--download-archive', self.archive_path,
                 url
             ]
 

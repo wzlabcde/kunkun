@@ -118,12 +118,26 @@ class DownloaderWidget(QWidget):
             self.cookies_input.setText(file_path)
 
     def _select_output(self):
-        """选择输出文件夹"""
+        """选择输出文件夹，并预扫描已有媒体数"""
         folder_path = QFileDialog.getExistingDirectory(
             self, "选择输出文件夹"
         )
         if folder_path:
             self.output_input.setText(folder_path)
+            existing = self._count_media_files(folder_path)
+            self._log(f"[检测] 输出目录已有 {existing} 个媒体文件（将只下载增量）")
+
+    @staticmethod
+    def _count_media_files(path: str) -> int:
+        """递归统计目录下图片+视频数量"""
+        exts = {'.jpg', '.jpeg', '.png', '.gif', '.webp', '.bmp',
+                '.mp4', '.webm', '.mov', '.mkv', '.avi'}
+        count = 0
+        for root, _, files in os.walk(path):
+            for f in files:
+                if os.path.splitext(f)[1].lower() in exts:
+                    count += 1
+        return count
 
     def _log(self, message: str):
         """添加日志消息"""
@@ -171,6 +185,9 @@ class DownloaderWidget(QWidget):
         self.start_btn.setEnabled(False)
         self.stop_btn.setEnabled(True)
 
+        # 记录下载前的媒体数，完成后计算增量
+        self._media_before = self._count_media_files(output_path)
+
         # 创建并启动工作线程
         self.worker = DownloadWorker(username, cookies_path, output_path)
         self.worker.progress.connect(self._log)
@@ -189,8 +206,12 @@ class DownloaderWidget(QWidget):
         self.stop_btn.setEnabled(False)
 
         if success:
-            self._log(f"\n✓ {message}")
-            QMessageBox.information(self, "成功", message)
+            output_path = self.output_input.text().strip()
+            media_after = self._count_media_files(output_path)
+            new_count = media_after - getattr(self, '_media_before', 0)
+            summary = f"{message} | 已有 {self._media_before} 个，本次新增 {new_count} 个，当前共 {media_after} 个"
+            self._log(f"\n✓ {summary}")
+            QMessageBox.information(self, "成功", summary)
         else:
             self._log(f"\n✗ {message}")
             if "用户取消" not in message:
